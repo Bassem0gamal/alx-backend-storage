@@ -15,6 +15,8 @@ if __name__ == "__main__":
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
     for method in methods:
-        print("\tmethod {}: {}".format(method, db.count_documents({"method": method})))
+        print("\tmethod {}: {}"
+              .format(method, db.count_documents({"method": method})))
 
-    print("{} status check".format(db.count_documents({"method": "GET", "path": "/status"})))
+    print("{} status check"
+          .format(db.count_documents({"method": "GET", "path": "/status"})))
