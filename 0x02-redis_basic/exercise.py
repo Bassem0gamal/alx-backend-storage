@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''exercise module'''
 
+
 import redis
 import uuid
 from typing import Union, Callable
@@ -11,7 +12,7 @@ def count_calls(method: Callable) -> Callable:
     """ Count the number of times a method is called from the cache """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        """ Increment every time the method is called """
+
         self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
     return wrapper
@@ -21,7 +22,7 @@ def call_history(method: Callable) -> Callable:
     """ Store the history of inputs and outputs """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        """ Store the history of inputs and outputs """
+
         self._redis.rpush(f"{method.__qualname__}:inputs", str(args))
         result = method(self, *args, **kwargs)
         self._redis.rpush(f"{method.__qualname__}:outputs", result)
