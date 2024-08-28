@@ -11,7 +11,7 @@ def count_calls(method: Callable) -> Callable:
     """ Count the number of times a method is called from the cache """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        """ Wrapper function """
+        """ Increment every time the method is called """
         self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
     return wrapper
