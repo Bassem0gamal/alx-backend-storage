@@ -3,10 +3,10 @@
 
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable
 
 
-def count_calls(method):
+def count_calls(method: Callable) -> Callable:
     """ Count the number of times a method is called from the cache """
     def wrapper(self, *args, **kwargs):
         """ Wrapper function """
