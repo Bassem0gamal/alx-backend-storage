@@ -8,6 +8,20 @@ from typing import Union, Callable
 from functools import wraps
 
 
+def replay(method: Callable) -> None:
+    """ Display the history of calls of a particular function """
+    r = redis.Redis()
+    method_name = method.__qualname__
+    inputs = r.lrange(f"{method_name}:inputs", 0, -1)
+    outputs = r.lrange(f"{method_name}:outputs", 0, -1)
+    print("{} was called {} times:"
+          .format(method_name, r.get(method_name).decode('utf-8')))
+
+    for inp, outp in zip(inputs, outputs):
+        print("{}(*('{}',)) -> {}"
+              .format(method_name, inp.decode('utf-8'), outp.decode('utf-8')))
+
+
 def count_calls(method: Callable) -> Callable:
     """ Count the number of times a method is called from the cache """
     @wraps(method)
