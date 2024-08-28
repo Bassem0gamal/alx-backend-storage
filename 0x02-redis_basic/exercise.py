@@ -17,6 +17,18 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    """ Store the history of inputs and outputs """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """ Store the history of inputs and outputs """
+        self._redis.rpush(f"{method.__qualname__}:inputs", str(args))
+        result = method(self, *args, **kwargs)
+        self._redis.rpush(f"{method.__qualname__}:outputs", result)
+        return result
+    return wrapper
+
+
 class Cache:
     """ My cache class """
 
