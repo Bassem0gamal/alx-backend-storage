@@ -38,6 +38,8 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ Storing the data in redis """
         key = str(uuid.uuid4())
@@ -49,8 +51,10 @@ class Cache:
         data = self._redis.get(key)
         if not data:
             return None
+
         if fn:
             return fn(data)
+
         return data
 
     def get_str(self, key: str) -> str:
